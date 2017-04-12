@@ -10,7 +10,7 @@ RUN curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash - && sudo apt-g
 # Install Koa and build web server
 RUN mkdir -p /home/web/www /home/web/conf && cd /home/web && npm i koa
 
-ADD web_config.js /home/web/conf/
+ADD web_conf.js /home/web/conf/
 
 # #https://github.com/docker/docker/issues/6103
 RUN mkdir -p /var/run/sshd && sed -i "s/UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config && sed -i "s/PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config && sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
