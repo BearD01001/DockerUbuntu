@@ -1,6 +1,7 @@
 #!/bin/bash
 if [ ! -f /data/persistent/.root_pw_set ]; then
 	/data/set_root_pw.sh
+    /data/http_server.sh
 fi
 
 # see this bug report for more info https://github.com/cloudbec/nuagebec-docker-ubuntu/issues/1

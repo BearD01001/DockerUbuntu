@@ -8,13 +8,10 @@ RUN apt-get update -y && apt-get -y upgrade && DEBIAN_FRONTEND=noninteractive ap
 RUN curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash - && sudo apt-get install nodejs -y
 
 # Install Koa and build web server
-RUN mkdir -p /home/web/www /home/web/api /home/web/conf && cd /home/web && npm i koa
+RUN mkdir -p /home/web/www /home/web/api /home/web/conf && cd /home/web && npm i koa && npm i http-server -g
 
+ADD http_server.sh /data/
 ADD web_conf.js /home/web/conf/
-
-WORKDIR /home/web/www
-
-RUN npm i http-server -g && http-server . -p 80 && echo "Hello world!" >> index.html && echo "　　　　-- BearD01001" >> index.html
 
 # #https://github.com/docker/docker/issues/6103
 RUN mkdir -p /var/run/sshd && sed -i "s/UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config && sed -i "s/PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config && sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
@@ -26,15 +23,15 @@ VOLUME /data/persistent
 WORKDIR /data
 
 ADD set_root_pw.sh /data/set_root_pw.sh
-ADD run.sh /data/run.sh
 
+ADD run.sh /data/run.sh
 
 # As suggested here : http://docs.docker.com/articles/using_supervisord/
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 ADD sshd.conf /etc/supervisor/conf.d/sshd.conf
 
-RUN chmod a+x /data/*.sh
+RUN chmod a+x *.sh
 
 # ## Strangely... docker.io don't want build this image since xterm env..
 # # ENV TERM="xterm-color"
