@@ -6,7 +6,7 @@ if [ -f /data/persistant/.root_pw_set ]; then
 fi
 
 # PASS=${ROOT_PASS:-$(pwgen -s 12 1)}
-PASS=${ROOT_PASS:-666}
+PASS=666
 _word=$( [ ${ROOT_PASS} ] && echo "preset" || echo "random" )
 echo "=> Setting a ${_word} password to the root user"
 echo "root:$PASS" | chpasswd
