@@ -2,13 +2,21 @@ FROM ubuntu:14.04
 MAINTAINER BearD01001 <dino@beard.ink>
 
 # Install packages
-RUN apt-get update -y && apt-get -y upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install openssh-server ca-certificates pwgen supervisor git tar vim-nox vim-syntax-go wget curl --no-install-recommends && apt-get clean  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update -y && \
+    apt-get -y upgrade && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install openssh-server ca-certificates pwgen supervisor git tar vim-nox vim-syntax-go wget curl --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install NodeJS@7.x
-RUN curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash - && sudo apt-get install nodejs -y
+RUN curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash - && \
+    sudo apt-get install nodejs -y
 
 # Install Koa and build web server
-RUN mkdir -p /home/web/www /home/web/api /home/web/conf && cd /home/web && npm i koa && npm i http-server -g
+RUN mkdir -p /home/web/www /home/web/api /home/web/conf && \
+    cd /home/web && \
+    npm i koa && \
+    npm i http-server -g
 
 WORKDIR /home/web/www
 
@@ -18,7 +26,10 @@ ADD http_server.conf /etc/supervisor/conf.d/
 ADD web_conf.js /home/web/conf/
 
 # https://github.com/docker/docker/issues/6103
-RUN mkdir -p /var/run/sshd && sed -i "s/UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config && sed -i "s/PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config && sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+RUN mkdir -p /var/run/sshd && \
+    sed -i "s/UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config && \
+    sed -i "s/PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config && \
+    sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 # define volume
 VOLUME /data/persistent
