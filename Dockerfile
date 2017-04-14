@@ -25,6 +25,14 @@ RUN echo "<hr/><h1>Hello world!</h1><br/><h2>    -- BearD01001</h2><hr/>" > inde
 ADD http_server.conf /etc/supervisor/conf.d/
 ADD web_conf.js /home/web/conf/
 
+# Install MariaDB
+RUN sudo apt-get install software-properties-common && \
+    sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db && \
+    sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirrors.tuna.tsinghua.edu.cn/mariadb/repo/10.1/ubuntu trusty main' && \
+    sudo apt-get update && \
+    sudo apt-get install -y --no-install-recommends mariadb-server && \
+    apt-get clean all
+
 # https://github.com/docker/docker/issues/6103
 RUN mkdir -p /var/run/sshd && \
     sed -i "s/UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config && \
