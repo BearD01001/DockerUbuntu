@@ -26,12 +26,12 @@ ADD http_server.conf /etc/supervisor/conf.d/
 ADD web_conf.js /home/web/conf/
 
 # Install MariaDB
-RUN apt-get install software-properties-common && \
-    apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db && \
-    add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mirrors.tuna.tsinghua.edu.cn/mariadb/repo/10.1/ubuntu trusty main' && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends mariadb-server && \
-    apt-get clean all
+RUN apt-get install software-properties-common
+RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
+RUN add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mariadb.nethub.com.hk/repo/10.1/ubuntu trusty main'
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends mariadb-server
+RUN apt-get clean all
 
 # https://github.com/docker/docker/issues/6103
 RUN mkdir -p /var/run/sshd && \
