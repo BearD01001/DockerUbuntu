@@ -2,19 +2,42 @@ FROM ubuntu:14.04
 MAINTAINER BearD01001 <dino@beard.ink>
 
 # Install packages
-RUN apt-get update -y && apt-get -y upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install openssh-server ca-certificates pwgen supervisor git tar vim-nox vim-syntax-go wget curl --no-install-recommends && apt-get clean  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get -y update && \
+    apt-get -y upgrade && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install openssh-server ca-certificates pwgen supervisor git tar vim-nox vim-syntax-go wget curl --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install NodeJS@7.x
-RUN curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash - && sudo apt-get install nodejs -y
+RUN curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash - && \
+    sudo apt-get install nodejs -y
 
 # Install Koa and build web server
-RUN mkdir -p /home/web/www /home/web/api /home/web/conf && cd /home/web && npm i koa && npm i http-server -g
+RUN mkdir -p /home/web/www /home/web/api /home/web/conf && \
+    cd /home/web && \
+    npm i koa && \
+    npm i http-server -g
 
-ADD http_server.sh /data/
+WORKDIR /home/web/www
+
+RUN echo "<hr/><h1>Hello world!</h1><br/><h2>    -- BearD01001</h2><hr/>" > index.html
+
+ADD http_server.conf /etc/supervisor/conf.d/
 ADD web_conf.js /home/web/conf/
 
-# #https://github.com/docker/docker/issues/6103
-RUN mkdir -p /var/run/sshd && sed -i "s/UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config && sed -i "s/PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config && sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
+# Install MariaDB
+RUN apt-get install -y software-properties-common && \
+    apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db && \
+    add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://mariadb.nethub.com.hk/repo/10.1/ubuntu trusty main' && \
+    apt-get -y update && \
+    apt-get install -y --no-install-recommends mariadb-server && \
+    apt-get clean all
+
+# https://github.com/docker/docker/issues/6103
+RUN mkdir -p /var/run/sshd && \
+    sed -i "s/UsePrivilegeSeparation.*/UsePrivilegeSeparation no/g" /etc/ssh/sshd_config && \
+    sed -i "s/PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config && \
+    sed -ri 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
 # define volume
 VOLUME /data/persistent
