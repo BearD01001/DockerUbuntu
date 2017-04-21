@@ -1,6 +1,7 @@
 #!/bin/bash
 if [ ! -f /data/persistent/.root_pw_set ]; then
 	/data/set_root_pw.sh
+    /data/set_db_pw.sh
     /data/http_server.sh
 fi
 
