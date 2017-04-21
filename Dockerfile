@@ -53,6 +53,7 @@ ADD run.sh /data/run.sh
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 ADD sshd.conf /etc/supervisor/conf.d/sshd.conf
+ADD mysql.conf /etc/supervisor/conf.d/mysql.conf
 
 RUN chmod a+x *.sh
 
