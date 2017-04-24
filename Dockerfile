@@ -45,7 +45,8 @@ VOLUME /data/persistent
 # Define working directory.
 WORKDIR /data
 
-ADD set_root_pw.sh /data/set_root_pw.sh
+ADD set_db_pw.sh /data/
+ADD set_root_pw.sh /data/
 
 ADD run.sh /data/run.sh
 
