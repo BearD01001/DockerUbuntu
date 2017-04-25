@@ -1,3 +1,5 @@
+service mysql start
+
 DB_PW_DEFAULT = 666
 
 /usr/bin/mysqladmin -u root password $DB_PW_DEFAULT
