@@ -48,13 +48,13 @@ WORKDIR /data
 ADD set_db_pw.sh /data/
 ADD set_root_pw.sh /data/
 
-ADD run.sh /data/run.sh
+ADD run.sh /data/
 
 # As suggested here : http://docs.docker.com/articles/using_supervisord/
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD supervisord.conf /etc/supervisor/conf.d/
 
-ADD sshd.conf /etc/supervisor/conf.d/sshd.conf
-ADD mysql.conf /etc/supervisor/conf.d/mysql.conf
+ADD sshd.conf /etc/supervisor/conf.d/
+ADD mysql.conf /etc/supervisor/conf.d/
 
 RUN chmod a+x *.sh
 
