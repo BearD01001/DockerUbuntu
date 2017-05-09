@@ -23,7 +23,6 @@ WORKDIR /home/web/www
 RUN echo "<hr/><h1>Hello world!</h1><br/><h2>    -- BearD01001</h2><hr/>" > index.html
 
 ADD http_server.conf /etc/supervisor/conf.d/
-ADD web_conf.js /home/web/conf/
 
 # Install MariaDB
 RUN apt-get install -y software-properties-common && \
